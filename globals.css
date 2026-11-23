@@ -1,0 +1,205 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --color-canvas: #060912;
+  --color-surface: #0c1220;
+  --color-surface-2: #111a2c;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    background-image:
+      radial-gradient(
+        60rem 40rem at 12% -10%,
+        rgba(16, 185, 129, 0.13),
+        transparent 60%
+      ),
+      radial-gradient(
+        50rem 36rem at 92% 0%,
+        rgba(56, 189, 248, 0.12),
+        transparent 62%
+      ),
+      radial-gradient(
+        40rem 30rem at 50% 110%,
+        rgba(139, 92, 246, 0.1),
+        transparent 60%
+      );
+    background-attachment: fixed;
+    color: #e2e8f0;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: rgba(52, 211, 153, 0.32);
+    color: #f8fafc;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 9999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+}
+
+@utility glass-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(14px);
+}
+
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Markdown rendering used by slide decks and long-form notes. */
+.note-body {
+  color: #cbd5e1;
+  font-size: 0.975rem;
+  line-height: 1.75;
+}
+
+.note-body h1,
+.note-body h2,
+.note-body h3,
+.note-body h4 {
+  color: #f8fafc;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin: 1.4rem 0 0.6rem;
+}
+
+.note-body h1 {
+  font-size: 1.5rem;
+}
+.note-body h2 {
+  font-size: 1.25rem;
+}
+.note-body h3 {
+  font-size: 1.05rem;
+}
+
+.note-body p {
+  margin: 0.65rem 0;
+}
+
+.note-body ul,
+.note-body ol {
+  margin: 0.65rem 0 0.65rem 1.15rem;
+  padding: 0;
+  list-style: disc;
+}
+
+.note-body ol {
+  list-style: decimal;
+}
+
+.note-body li {
+  margin: 0.3rem 0;
+}
+
+.note-body a {
+  color: #34d399;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.note-body strong {
+  color: #f1f5f9;
+  font-weight: 650;
+}
+
+.note-body code {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 0.35rem;
+  padding: 0.1rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: #7dd3fc;
+}
+
+.note-body pre {
+  background: rgba(2, 6, 23, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0.9rem 0;
+}
+
+.note-body pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: #cbd5e1;
+}
+
+.note-body blockquote {
+  border-left: 3px solid rgba(52, 211, 153, 0.6);
+  padding-left: 0.9rem;
+  color: #94a3b8;
+  margin: 0.9rem 0;
+}
+
+.note-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.9rem 0;
+  font-size: 0.9rem;
+}
+
+.note-body th,
+.note-body td {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+}
+
+.note-body th {
+  background: rgba(148, 163, 184, 0.12);
+  color: #f1f5f9;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.45s ease-out both;
+}
