@@ -66,19 +66,17 @@ export async function getMaterialsByCourse(courseId: number) {
   return db
     .select()
     .from(materials)
-    .where(and(eq(materials.courseId, courseId), eq(materials.published, true)))
+    .where(eq(materials.courseId, courseId))
     .orderBy(sql`${materials.week} desc nulls last`, desc(materials.createdAt), desc(materials.id));
 }
 
-export async function getAllMaterials(includeDrafts = false) {
-  return db.select().from(materials)
-    .where(includeDrafts ? undefined : eq(materials.published, true))
-    .orderBy(desc(materials.createdAt), desc(materials.id));
+export async function getAllMaterials() {
+  return db.select().from(materials).orderBy(desc(materials.createdAt), desc(materials.id));
 }
 
-export async function getMaterialById(id: number, includeDrafts = false) {
+export async function getMaterialById(id: number) {
   if (!Number.isFinite(id)) return null;
-  const rows = await db.select().from(materials).where(and(eq(materials.id, id), ...(includeDrafts ? [] : [eq(materials.published, true)]))).limit(1);
+  const rows = await db.select().from(materials).where(eq(materials.id, id)).limit(1);
   return rows[0] ?? null;
 }
 
@@ -87,7 +85,7 @@ export async function getMaterialsByWeek(week: number) {
     .select({ material: materials, courseCode: courses.code, courseId: courses.id })
     .from(materials)
     .innerJoin(courses, eq(materials.courseId, courses.id))
-    .where(and(eq(materials.week, week), eq(materials.published, true)))
+    .where(eq(materials.week, week))
     .orderBy(asc(courses.position), desc(materials.createdAt), desc(materials.id));
 }
 
@@ -106,7 +104,7 @@ export interface MaterialFilters {
 }
 
 export async function searchMaterials(filters: MaterialFilters) {
-  const clauses = [eq(materials.published, true)];
+  const clauses = [];
   if (filters.query) {
     const term = `%${filters.query}%`;
     clauses.push(
@@ -115,7 +113,7 @@ export async function searchMaterials(filters: MaterialFilters) {
         ilike(materials.description, term),
         ilike(courses.title, term),
         ilike(courses.code, term),
-      )!,
+      ),
     );
   }
   if (filters.courseId) clauses.push(eq(materials.courseId, filters.courseId));
@@ -155,7 +153,7 @@ export async function getFileWithData(id: number) {
 
 /* ------------------------------------------------------------------ quizzes */
 
-export async function getQuizzes(mode?: string, includeDrafts = false) {
+export async function getQuizzes(mode?: string) {
   const rows = await db
     .select({
       id: quizzes.id,
@@ -175,7 +173,6 @@ export async function getQuizzes(mode?: string, includeDrafts = false) {
       )`,
     })
     .from(quizzes)
-    .where(includeDrafts ? undefined : eq(quizzes.published, true))
     .orderBy(desc(quizzes.createdAt), desc(quizzes.id));
   return mode ? rows.filter((quiz) => quiz.mode === mode) : rows;
 }

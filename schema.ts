@@ -28,9 +28,7 @@ export const profiles = pgTable("profiles", {
   displayName: text("display_name").notNull(),
   role: text("role").notNull().default("student"), // 'student' | 'admin'
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-}, (table) => ({
-  onlyOneAdmin: uniqueIndex("profiles_one_admin_idx").on(table.role).where(sql`${table.role} = 'admin'`),
-}));
+});
 
 export const sessions = pgTable("sessions", {
   token: text("token").primaryKey(),
@@ -111,11 +109,9 @@ export const courseProgress = pgTable(
 export const files = pgTable("files", {
   id: serial("id").primaryKey(),
   filename: text("filename").notNull(),
+  storedName: text("stored_name").notNull().default(""),
   mimeType: text("mime_type").notNull().default("application/octet-stream"),
   sizeBytes: integer("size_bytes").notNull().default(0),
-  /** 'db' keeps bytes in PostgreSQL; 'blob' stores them on Vercel Blob. */
-  storage: text("storage").notNull().default("db"),
-  publicUrl: text("public_url"),
   data: bytea("data"),
   uploadedAt: timestamp("uploaded_at", { withTimezone: true }).notNull().defaultNow(),
 });
@@ -130,7 +126,6 @@ export const materials = pgTable(
     title: text("title").notNull(),
     description: text("description").notNull().default(""),
     kind: text("kind").notNull().default("notes"),
-    published: boolean("published").notNull().default(true),
     week: integer("week"),
     fileId: integer("file_id").references(() => files.id, { onDelete: "set null" }),
     url: text("url"),
